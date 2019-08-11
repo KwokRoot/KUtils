@@ -21,3 +21,11 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+
+util-commons/target/
+util-commons/.project
+util-commons/.classpath
+util-commons/.settings/org.eclipse.core.resources.prefs
+util-commons/.settings/org.eclipse.jdt.core.prefs
+util-commons/.settings/org.eclipse.m2e.core.prefs
+
