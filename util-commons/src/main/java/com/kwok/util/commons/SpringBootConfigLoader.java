@@ -43,7 +43,7 @@ public class SpringBootConfigLoader {
 		File file = new File(fileName);
 		
 		if (!isClassPath && file.exists()) {
-			logger.info(">>> " + new File("").getAbsolutePath() + " 目录下发现 " + fileName + " 文件");
+			logger.info(">>> " + getJarPath() + " 目录下发现 " + fileName + " 文件");
 			filePath = file.getAbsolutePath();
 			try {
 				io = new FileInputStream(filePath);
@@ -52,7 +52,7 @@ public class SpringBootConfigLoader {
 			}
 		}else{
 			if(!isClassPath){
-				logger.info(">>> " + new File("").getAbsolutePath() + " 目录下没有发现 " + fileName + " 文件");
+				logger.info(">>> " + getJarPath() + " 目录下没有发现 " + fileName + " 文件");
 			}
 			URL url = Thread.currentThread().getContextClassLoader().getResource(fileName);
 			if(url != null){
@@ -88,6 +88,7 @@ public class SpringBootConfigLoader {
 		if(io!=null){
 			try {
 				properties.load(io);
+				logger.info(">>> 加载 " + fileName + " 配置文件成功");
 				logger.info(">>> " + fileName + " 配置项：\r\n" + JSON.toJSONString(properties, SerializerFeature.PrettyFormat, SerializerFeature.MapSortField));
 			} catch (IOException e) {
 				logger.error(">>> 加载 " + fileName + " 配置文件失败！");
@@ -103,7 +104,7 @@ public class SpringBootConfigLoader {
 	}
 
 	public static String getJarPath(){
-		return new File("").getAbsolutePath();
+		return new File("").getAbsolutePath() + File.separator;
 	}
 	
 	public static String getClassPath(){
