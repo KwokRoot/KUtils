@@ -52,6 +52,8 @@ public class DateUtil {
     // 显示简体中文日期时间的格式
     public static final String yyyy_MM_dd_HH_mm_ss_zh = "yyyy年MM月dd日HH时mm分ss秒";
 
+    //UTC 日期时间的格式 "2018-08-08T12:00:00.000Z"  注：北京时区为东八区，领先 UTC时间 8个小时，+ 08:00 即北京时间为：2018-08-08 20:00:00.000
+    public static final String utc_date = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
     
     private static ThreadLocal<SimpleDateFormat> yyyy_MM_dd_DateTimeFormat = new ThreadLocal<SimpleDateFormat>() {
         @Override
@@ -83,7 +85,6 @@ public class DateUtil {
     };
 
     private static ThreadLocal<SimpleDateFormat> yyyyMMddHHmm_DateTimeFormat = new ThreadLocal<SimpleDateFormat>() {
-
         @Override
         protected SimpleDateFormat initialValue() {
             return new SimpleDateFormat(yyyyMMddHHmm);
@@ -91,13 +92,19 @@ public class DateUtil {
     };
 
     private static ThreadLocal<SimpleDateFormat> yyyyMMddHHmmss_DateTimeFormat = new ThreadLocal<SimpleDateFormat>() {
-
         @Override
         protected SimpleDateFormat initialValue() {
             return new SimpleDateFormat(yyyyMMddHHmmss);
         }
     };
 
+    private static ThreadLocal<SimpleDateFormat> utc_date_DateTimeFormat = new ThreadLocal<SimpleDateFormat>() {
+        @Override
+        protected SimpleDateFormat initialValue() {
+            return new SimpleDateFormat(utc_date);
+        }
+    };
+    
     private static SimpleDateFormat getDateFormat(String formatStr) {
 		if (formatStr.equalsIgnoreCase(yyyy_MM_dd)) {
 			return yyyy_MM_dd_DateTimeFormat.get();
@@ -111,6 +118,8 @@ public class DateUtil {
 			return yyyyMMddHHmm_DateTimeFormat.get();
 		} else if (formatStr.equalsIgnoreCase(yyyyMMddHHmmss)) {
 			return yyyyMMddHHmmss_DateTimeFormat.get();
+		}else if (formatStr.equalsIgnoreCase(utc_date)) {
+			return utc_date_DateTimeFormat.get();
 		} else {
 			return new SimpleDateFormat(formatStr);
 		}
