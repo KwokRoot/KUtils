@@ -50,22 +50,24 @@ public class HttpClientUtil {
 		HttpGet httpRequest = new HttpGet(url);
 		httpRequest.setConfig(REQUEST_CONFIG);
 		String entityStr = null;
+		long startTime = System.currentTimeMillis();
 		try {
 			logger.info(">>> 发送 HTTP GET 请求：请求id：{}，请求路径：{}", _request_id, url);
 			CloseableHttpResponse response = httpclient.execute(httpRequest);
-			logger.info(">>> 发送 HTTP GET 请求：请求id：{}，返回状态信息：{}", _request_id, response);
+			long spendTime = System.currentTimeMillis() - startTime;
+			logger.info(">>> 发送 HTTP GET 请求：请求id：{}，返回状态信息：{}，耗时：{} ms", _request_id, response, spendTime);
 			HttpEntity entity = response.getEntity();
 			if(entity != null){
 				entityStr = EntityUtils.toString(entity);
 			}
-			//logger.info(">>> 发送 HTTP GET 请求：请求id：{}，返回值：{}", _request_id, entityStr);
 			if(response.getStatusLine().getStatusCode() != HttpStatus.SC_OK){
-				logger.info(">>> 发送 HTTP GET 请求失败，请求id：{}，返回状态码：{}，异常：{}",  _request_id, response.getStatusLine().getStatusCode(), entityStr);
+				//logger.info(">>> 发送 HTTP GET 请求失败，请求id：{}，返回状态码：{}，异常：{}",  _request_id, response.getStatusLine().getStatusCode(), entityStr);
 				throw new Exception("错误码：" + response.getStatusLine().getStatusCode() + "，错误信息：" + entityStr);
 			}
 			response.close();
 		}catch (Exception e) {
-			logger.info(">>> 发送 HTTP GET 请求失败，请求id：{}，异常：{}", _request_id, e.getMessage());
+			long spendTime = System.currentTimeMillis() - startTime;
+			logger.info(">>> 发送 HTTP GET 请求失败，请求id：{}，异常：{}，耗时：{} ms", _request_id, e.getMessage(), spendTime);
 			throw new Exception("发送 HTTP GET 请求失败，异常：" + e.getMessage());
 		}
 		return entityStr;
@@ -93,22 +95,24 @@ public class HttpClientUtil {
 		httpRequest.setEntity(paramEntity);
 		httpRequest.setConfig(REQUEST_CONFIG);
 		String entityStr = null;
+		long startTime = System.currentTimeMillis();
 		try {
 			logger.info(">>> 发送 HTTP POST 请求：请求id：{}，请求路径：{}，请求参数：{}", _request_id, url, nvps);
 			CloseableHttpResponse response = httpclient.execute(httpRequest);
-			logger.info(">>> 发送 HTTP POST 请求：请求id：{}，返回状态信息：{}", _request_id, response);
+			long spendTime = System.currentTimeMillis() - startTime;
+			logger.info(">>> 发送 HTTP POST 请求：请求id：{}，返回状态信息：{}，耗时：{} ms", _request_id, response, spendTime);
 			HttpEntity entity = response.getEntity();
 			if(entity != null){
 				entityStr = EntityUtils.toString(entity);
 			}
-			//logger.info(">>> 发送 HTTP POST 请求：请求id：{}，返回值：{}", _request_id, entityStr);
 			if(response.getStatusLine().getStatusCode() != HttpStatus.SC_OK){
-				logger.info(">>> 发送 HTTP POST 请求失败，请求id：{}，返回状态码：{}，异常：{}", _request_id, response.getStatusLine().getStatusCode(), entityStr);
+				//logger.info(">>> 发送 HTTP POST 请求失败，请求id：{}，返回状态码：{}，异常：{}", _request_id, response.getStatusLine().getStatusCode(), entityStr);
 				throw new Exception("错误码：" + response.getStatusLine().getStatusCode() + "，错误信息：" + entityStr);
 			}
 			response.close();
 		}catch (Exception e) {
-			logger.info(">>> 发送 HTTP POST 请求失败，请求id：{}，异常：{}", _request_id, e.getMessage());
+			long spendTime = System.currentTimeMillis() - startTime;
+			logger.info(">>> 发送 HTTP POST 请求失败，请求id：{}，异常：{}，耗时：{} ms", _request_id, e.getMessage(), spendTime);
 			throw new Exception("发送 HTTP POST 请求失败，异常：" + e.getMessage());
 		}
 		return entityStr;
