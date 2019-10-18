@@ -8,7 +8,7 @@ import java.util.Properties;
  * @date: 2019年7月8日
  * @author Kwok
  */
-public class SystemProperties {
+public class SpringBootConfigFiles {
 
 	private static Map<String, Properties> pathStr_properties_map = new HashMap<String, Properties>();
 
