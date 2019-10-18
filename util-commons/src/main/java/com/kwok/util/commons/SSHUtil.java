@@ -3,7 +3,6 @@ package com.kwok.util.commons;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStreamReader;
-import java.security.Security;
 import java.util.Base64;
 import java.util.Properties;
 
@@ -31,11 +30,10 @@ public class SSHUtil {
 	public static String password;
 	
 	static {
-		Properties systemProperties = SystemProperties.getSystemProperties();
-		host = systemProperties.getProperty("ssh.host", "127.0.0.1");
-		port = Integer.valueOf(systemProperties.getProperty("ssh.port", "22"));
-		user = systemProperties.getProperty("ssh.user", "root");
-		password = new String(Base64.getDecoder().decode(systemProperties.getProperty("ssh.password", "")));
+		host = SystemProperties.getSystemProperties("ssh.host", "127.0.0.1");
+		port = Integer.valueOf(SystemProperties.getSystemProperties("ssh.port", "22"));
+		user = SystemProperties.getSystemProperties("ssh.user", "root");
+		password = new String(Base64.getDecoder().decode(SystemProperties.getSystemProperties("ssh.password", "")));
 	}
 	
 
