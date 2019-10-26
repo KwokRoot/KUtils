@@ -18,6 +18,8 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpHead;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
@@ -73,8 +75,9 @@ public class HttpClientUtil {
 		return entityStr;
 	}
 	
+	
 	/**
-	  * 发送 POST 请求
+	  * 发送 POST 键值对参数 请求 
 	  * @date 2019年8月8日 下午8:25:25
 	  * @author Kwok
 	  **/
@@ -117,6 +120,47 @@ public class HttpClientUtil {
 		}
 		return entityStr;
 	}
+	
+	
+	/**
+	  * 发送 POST JSON字符串参数 请求
+	  * @date 2019年10月26日 下午15:25:25
+	  * @author Kwok
+	  **/
+	public static String postRequest(String url, String jsonBody) throws Exception{
+		
+		String _request_id = UUID.randomUUID().toString();
+		CloseableHttpClient httpclient = HttpClients.createDefault();
+		
+		HttpEntity jsonEntity = new StringEntity(jsonBody, ContentType.APPLICATION_JSON);
+		
+		HttpPost httpRequest = new HttpPost(url);
+		httpRequest.setEntity(jsonEntity);
+		httpRequest.setConfig(REQUEST_CONFIG);
+		String entityStr = null;
+		long startTime = System.currentTimeMillis();
+		try {
+			logger.info(">>> 发送 HTTP POST 请求：请求id：{}，请求路径：{}，请求参数：{}", _request_id, url, jsonBody);
+			CloseableHttpResponse response = httpclient.execute(httpRequest);
+			long spendTime = System.currentTimeMillis() - startTime;
+			logger.info(">>> 发送 HTTP POST 请求：请求id：{}，返回状态信息：{}，耗时：{} ms", _request_id, response, spendTime);
+			HttpEntity entity = response.getEntity();
+			if(entity != null){
+				entityStr = EntityUtils.toString(entity);
+			}
+			if(response.getStatusLine().getStatusCode() != HttpStatus.SC_OK){
+				//logger.info(">>> 发送 HTTP POST 请求失败，请求id：{}，返回状态码：{}，异常：{}", _request_id, response.getStatusLine().getStatusCode(), entityStr);
+				throw new Exception("错误码：" + response.getStatusLine().getStatusCode() + "，错误信息：" + entityStr);
+			}
+			response.close();
+		}catch (Exception e) {
+			long spendTime = System.currentTimeMillis() - startTime;
+			logger.info(">>> 发送 HTTP POST 请求失败，请求id：{}，异常：{}，耗时：{} ms", _request_id, e.getMessage(), spendTime);
+			throw new Exception("发送 HTTP POST 请求失败，异常：" + e.getMessage());
+		}
+		return entityStr;
+	}
+	
 	
 	/**
 	  * 发送 HEAD 请求
