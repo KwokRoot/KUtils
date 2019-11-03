@@ -42,7 +42,9 @@ public class JedisFactory {
 
 	public static Jedis getJedis(int dbIndex) {
 		Jedis jedis = getJedis();
-		jedis.select(dbIndex);
+		if (jedis != null) {
+			jedis.select(dbIndex);
+		}
 		return jedis;
 	}
 
