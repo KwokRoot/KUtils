@@ -461,7 +461,6 @@ public class DateUtil {
 
     /**
      * 获得系统当前月份的天数
-     *
      * @return
      */
     public static int getCurentMonthDays() {
@@ -469,29 +468,92 @@ public class DateUtil {
         return getMonthDay(date);
     }
     
+    
     /**
-     * 获取当天零时时间戳
-     *
+     * 获取当天 00:00:00 时间戳
      * @return
      */
     public static long getCurDayStarttime() {
         return strToDate(getCuryyyy_MM_dd() + " 00:00:00").getTime();
     }
 
+    /**
+     * 获取当天 23:59:59 时间戳
+     * @return
+     */
     public static long getCurDayEndTime() {
         return strToDate(getCuryyyy_MM_dd() + " 23:59:59").getTime();
     }
     
-    /*
-     * 获取当前整时时间戳
+    /**
+	 * 获取当前整时时间戳
+	 */
+	public static long getCurHourStartTime() {
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+	    return calendar.getTimeInMillis();
+	}
+
+	/**
+     * 获取本周周一零时时间戳
+     * @return
      */
-    public static long getCurHourStartTime() {
+    public static long getCurMondayStartTime() {
+    	
     	Calendar calendar = Calendar.getInstance();
+		calendar.setFirstDayOfWeek(Calendar.MONDAY);
+		calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY); 
+		calendar.set(Calendar.HOUR_OF_DAY, 0);
 		calendar.set(Calendar.MINUTE, 0);
 		calendar.set(Calendar.SECOND, 0);
 		calendar.set(Calendar.MILLISECOND, 0);
         return calendar.getTimeInMillis();
     }
+    
+    /**
+     * 获取本周周天23:59:59.999时间戳
+     */
+    public static long getCurSundayEndTime() {
+    	Calendar calendar = Calendar.getInstance();
+		calendar.setFirstDayOfWeek(Calendar.MONDAY);
+		calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY); 
+		calendar.set(Calendar.HOUR_OF_DAY, 23);
+		calendar.set(Calendar.MINUTE, 59);
+		calendar.set(Calendar.SECOND, 59);
+		calendar.set(Calendar.MILLISECOND, 999);
+        return calendar.getTimeInMillis();
+    }
+    
+    /**
+     * 上月开始时间
+     */
+    public static Date getLastMonthStartTime() {
+    	Calendar calendar = Calendar.getInstance();
+    	calendar.add(Calendar.MONTH, -1);
+    	calendar.set(Calendar.DAY_OF_MONTH, 1);
+    	calendar.set(Calendar.HOUR_OF_DAY, 0);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+        return calendar.getTime();
+    }
+    
+    /**
+     * 上月结束时间
+     */
+    public static Date getLastMonthEndTime() {
+    	Calendar calendar = Calendar.getInstance();
+    	calendar.add(Calendar.MONTH, -1);
+    	calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+		calendar.set(Calendar.HOUR_OF_DAY, 23);
+		calendar.set(Calendar.MINUTE, 59);
+		calendar.set(Calendar.SECOND, 59);
+		calendar.set(Calendar.MILLISECOND, 999);
+        return calendar.getTime();
+    }
+    
     
     /**
      * 获取Date中的分钟
