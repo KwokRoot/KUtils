@@ -92,6 +92,22 @@ public class DateUtil {
         }
     };
 
+    private static ThreadLocal<SimpleDateFormat> yyyyMM_DateTimeFormat = new ThreadLocal<SimpleDateFormat>() {
+
+        @Override
+        protected SimpleDateFormat initialValue() {
+            return new SimpleDateFormat(yyyyMM);
+        }
+    };
+    
+    private static ThreadLocal<SimpleDateFormat> yyyyMMdd_DateTimeFormat = new ThreadLocal<SimpleDateFormat>() {
+
+        @Override
+        protected SimpleDateFormat initialValue() {
+            return new SimpleDateFormat(yyyyMMdd);
+        }
+    };
+    
     private static ThreadLocal<SimpleDateFormat> yyyyMMddHHmm_DateTimeFormat = new ThreadLocal<SimpleDateFormat>() {
         @Override
         protected SimpleDateFormat initialValue() {
@@ -122,11 +138,15 @@ public class DateUtil {
 			return yyyy_MM_dd_zh_DateTimeFormat.get();
 		} else if (formatStr.equalsIgnoreCase(yyyy_MM_dd_HH_mm_ss_zh)) {
 			return yyyy_MM_dd_HH_mm_ss_zh_DateTimeFormat.get();
+		} else if (formatStr.equalsIgnoreCase(yyyyMM)) {
+			return yyyyMM_DateTimeFormat.get();
+		} else if (formatStr.equalsIgnoreCase(yyyyMMdd)) {
+			return yyyyMMdd_DateTimeFormat.get();
 		} else if (formatStr.equalsIgnoreCase(yyyyMMddHHmm)) {
 			return yyyyMMddHHmm_DateTimeFormat.get();
 		} else if (formatStr.equalsIgnoreCase(yyyyMMddHHmmss)) {
 			return yyyyMMddHHmmss_DateTimeFormat.get();
-		}else if (formatStr.equalsIgnoreCase(utc_date)) {
+		} else if (formatStr.equalsIgnoreCase(utc_date)) {
 			return utc_date_DateTimeFormat.get();
 		} else {
 			return new SimpleDateFormat(formatStr);
@@ -556,6 +576,100 @@ public class DateUtil {
     
     
     /**
+	 * 获取给定日期的零时时间戳
+	 *
+	 * @return
+	 */
+	public static long getCurDayStartTime(Date curDate) {
+	    return strToDate(dateToStr(curDate, yyyy_MM_dd) + " 00:00:00").getTime();
+	}
+
+	/**
+	 * 获取给定日期的结束时间戳
+	 *
+	 * @return
+	 */
+	public static long getCurDayEndTime(Date curDate) {
+		return strToDate(dateToStr(curDate, yyyy_MM_dd) + " 23:59:59").getTime();
+	}
+
+	/**
+	 * 获取给定时间前整时时间戳
+	 */
+	public static long getCurHourStartTime(Date curDate) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(curDate);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+	    return calendar.getTimeInMillis();
+	}
+
+	/**
+	 * 获取给定时间的周一零时时间戳
+	 *
+	 * @return
+	 */
+	public static long getCurMondayStartTime(Date curDate) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(curDate);
+		calendar.setFirstDayOfWeek(Calendar.MONDAY);
+		calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY); 
+		calendar.set(Calendar.HOUR_OF_DAY, 0);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+	    return calendar.getTimeInMillis();
+	    
+	}
+
+	/**
+	 * 获取给定时间的周天23:59:59.999时间戳
+	 * 
+	 */
+	public static long getCurSundayEndTime(Date curDate) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(curDate);
+		calendar.setFirstDayOfWeek(Calendar.MONDAY);
+		calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY); 
+		calendar.set(Calendar.HOUR_OF_DAY, 23);
+		calendar.set(Calendar.MINUTE, 59);
+		calendar.set(Calendar.SECOND, 59);
+		calendar.set(Calendar.MILLISECOND, 999);
+	    return calendar.getTimeInMillis();
+	}
+
+	/**
+	 * 获取给定时间的上月开始时间
+	 */
+	public static Date getLastMonthStartTime(Date curDate) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(curDate);
+		calendar.add(Calendar.MONTH, -1);
+		calendar.set(Calendar.DAY_OF_MONTH, 1);
+		calendar.set(Calendar.HOUR_OF_DAY, 0);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+	    return calendar.getTime();
+	}
+
+	/**
+	 * 获取给定时间的上月结束时间
+	 */
+	public static Date getLastMonthEndTime(Date curDate) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(curDate);
+		calendar.add(Calendar.MONTH, -1);
+		calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+		calendar.set(Calendar.HOUR_OF_DAY, 23);
+		calendar.set(Calendar.MINUTE, 59);
+		calendar.set(Calendar.SECOND, 59);
+		calendar.set(Calendar.MILLISECOND, 999);
+	    return calendar.getTime();
+	}
+
+	/**
      * 获取Date中的分钟
      *
      * @param d
@@ -686,5 +800,5 @@ public class DateUtil {
         calendar.setTime(date);
         return calendar.getWeekYear();
     }
-    
+
 }

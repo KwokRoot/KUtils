@@ -62,5 +62,17 @@ public class DateUtilTest {
         System.out.println(DateUtil.dateToStr(calendar.getTime())); //结果：2019-01-06 15:30:22
 	}
 	
+	
+	@Test
+	public void getCurDayStartTimeTest(){
+		Date curDate = DateUtil.strToDate("2019-10-01", DateUtil.yyyy_MM_dd);
+		System.out.println(DateUtil.getCurDayStartTime(curDate));
+		System.out.println(DateUtil.getCurDayEndTime(curDate));
+		System.out.println(DateUtil.getCurMondayStartTime(curDate));
+		System.out.println(DateUtil.getCurSundayEndTime(curDate));
+		System.out.println(DateUtil.getLastMonthStartTime(curDate));
+		System.out.println(DateUtil.getLastMonthEndTime(curDate));
+		System.out.println(DateUtil.getCurHourStartTime(curDate));
+	}
+	
 }
-
