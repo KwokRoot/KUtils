@@ -62,6 +62,15 @@ public class DateUtil {
     // 60 * 1000 = 60000‬
     public static final long oneMinuteMs = 60000;
     
+    private static final String TIME_S_EN = "s";
+    private static final String TIME_M_EN = "m";
+    private static final String TIME_H_EN = "h";
+    private static final String TIME_D_EN = "d";
+
+    private static final String TIME_S_CN = "秒";
+    private static final String TIME_M_CN = "分";
+    private static final String TIME_H_CN = "时";
+    private static final String TIME_D_CN = "天";
     
     private static ThreadLocal<SimpleDateFormat> yyyy_MM_dd_DateTimeFormat = new ThreadLocal<SimpleDateFormat>() {
         @Override
@@ -801,4 +810,42 @@ public class DateUtil {
         return calendar.getWeekYear();
     }
 
+    
+    /**
+     * 方便的把时间换算成毫秒数
+     * 
+     * 支持几个单位, s(秒), m(分), h(时), d(天)
+     * 
+     * 比如:
+     * 
+     * 100s -> 100000 <br>
+     * 2分 -> 120000 <br>
+     * 3h -> 10800000 <br>
+     * 
+     * @param tstr
+     *            时间字符串
+     * @return 毫秒数
+     */
+    public static long toMillis(String tstr) {
+        if (tstr == null || tstr.trim().length() == 0) {
+            return 0;
+        }
+        tstr = tstr.toLowerCase();
+        String tl = tstr.substring(0, tstr.length() - 1);
+        String tu = tstr.substring(tstr.length() - 1);
+        if (TIME_S_EN.equals(tu) || TIME_S_CN.equals(tu)) {
+            return 1000 * Long.valueOf(tl);
+        }
+        if (TIME_M_EN.equals(tu) || TIME_M_CN.equals(tu)) {
+            return oneMinuteMs * Long.valueOf(tl);
+        }
+        if (TIME_H_EN.equals(tu) || TIME_H_CN.equals(tu)) {
+            return oneHourMs * Long.valueOf(tl);
+        }
+        if (TIME_D_EN.equals(tu) || TIME_D_CN.equals(tu)) {
+            return oneDayMs * Long.valueOf(tl);
+        }
+        return Long.valueOf(tstr);
+    }
+    
 }

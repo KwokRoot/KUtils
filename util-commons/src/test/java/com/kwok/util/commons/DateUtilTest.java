@@ -75,4 +75,11 @@ public class DateUtilTest {
 		System.out.println(DateUtil.getCurHourStartTime(curDate));
 	}
 	
+	
+	@Test
+	public void toMillisTest() {
+		System.out.println(DateUtil.toMillis("1H"));
+		System.out.println(DateUtil.toMillis("1时"));
+	}
+	
 }
