@@ -41,7 +41,7 @@ public class DateUtil {
     public static final String yyyy_MM_dd_HH_mm_ss = "yyyy-MM-dd HH:mm:ss";
 
     // 显示日期时间的格式
-    public static final String yyyy_MM_dd_HH_mm_ss_SSS = "yyyy-MM-dd HH:mm:ss:SSS";
+    public static final String yyyy_MM_dd_HH_mm_ss_SSS = "yyyy-MM-dd HH:mm:ss.SSS";
     
     // 显示简体中文日期的格式
     public static final String yyyy_MM_dd_zh = "yyyy年MM月dd日";
