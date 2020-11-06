@@ -3,6 +3,8 @@ package com.kwok.util.commons;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -108,6 +110,31 @@ public class SimpleBeanUtil {
 			}
 		}
 		return fieldList;
+	}
+	
+	
+	/**
+	 * 把 Bean 实体对象非静态字段转化为 HashMap
+	 * @author Kwok
+	 */
+	public static Map<String, Object> bean2Map(Object bean, boolean ignoreNullVal, List<String> ignoreAttrList) throws Exception{
+		Map<String, Object> reslutMap = new HashMap<String, Object>();
+		
+		if(ignoreAttrList == null){
+			ignoreAttrList = Collections.emptyList();
+		}
+		
+		Class<?> beanClass = bean.getClass(); 
+		List<Field> ownAndSuperNotStaticField = getOwnAndSuperNotStaticField(beanClass);
+		for (Field field : ownAndSuperNotStaticField) {
+			field.setAccessible(true);
+			Object value = field.get(bean);
+			if ((value != null || !ignoreNullVal) && !ignoreAttrList.contains(field.getName())) {
+				reslutMap.put(field.getName(), value);
+			}
+		}
+		
+		return reslutMap;
 	}
 	
 }
