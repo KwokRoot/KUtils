@@ -1,4 +1,4 @@
-package testlib;
+package com.kwok.util.commons;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
