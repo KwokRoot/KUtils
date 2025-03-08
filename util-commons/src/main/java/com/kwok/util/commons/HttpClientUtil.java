@@ -36,18 +36,31 @@ public class HttpClientUtil {
 	private static final Logger logger = LoggerFactory.getLogger(HttpClientUtil.class);
 	
 	private static final RequestConfig REQUEST_CONFIG = RequestConfig.custom()
-			.setConnectTimeout(30000)
-			.setSocketTimeout(50000)
+			.setConnectTimeout(10000)
+			.setSocketTimeout(60000)
 			.build();
+	
 	
 	/**
 	  * 发送 GET 请求
+	  * @date 2025年3月8日 下午16:19:25
+	  * @author Kwok
+	  **/
+	public static String getRequest(String url) throws Exception {
+		return getRequest(url, null);
+	}
+
+	/**
+	  * 发送 GET 请求，自定义请求Id
 	  * @date 2019年8月8日 下午8:25:25
 	  * @author Kwok
 	  **/
-	public static String getRequest(String url) throws Exception{
+	public static String getRequest(String url, String _request_id) throws Exception{
 		
-		String _request_id = UUID.randomUUID().toString();
+		if (_request_id == null || _request_id.trim().isEmpty()){
+			_request_id = UUID.randomUUID().toString();
+		}
+		
 		CloseableHttpClient httpclient = HttpClients.createDefault();
 		HttpGet httpRequest = new HttpGet(url);
 		httpRequest.setConfig(REQUEST_CONFIG);
@@ -71,19 +84,36 @@ public class HttpClientUtil {
 			long spendTime = System.currentTimeMillis() - startTime;
 			logger.info(">>> 发送 HTTP GET 请求失败，请求id：{}，异常：{}，耗时：{} ms", _request_id, e.getMessage(), spendTime);
 			throw new Exception("发送 HTTP GET 请求失败，异常：" + e.getMessage());
+		} finally {
+			try {
+				httpclient.close();
+			} catch (IOException e) {
+				logger.error("httpclient 关闭异常：", e);
+			}
 		}
 		return entityStr;
 	}
 	
-	
 	/**
-	  * 发送 POST 键值对参数 请求 
-	  * @date 2019年8月8日 下午8:25:25
+	  * 发送 POST 键值对参数 请求
+	  * @date 2025年3月8日 下午16:19:25
 	  * @author Kwok
 	  **/
 	public static String postRequest(String url, Map<String, Object> KeyValueParam) throws Exception{
+		return postRequest(url, KeyValueParam, null);
+	}
+	
+	/**
+	  * 发送 POST 键值对参数 请求，自定义请求Id
+	  * @date 2019年8月8日 下午8:25:25
+	  * @author Kwok
+	  **/
+	public static String postRequest(String url, Map<String, Object> KeyValueParam, String _request_id) throws Exception{
 		
-		String _request_id = UUID.randomUUID().toString();
+		if (_request_id == null || _request_id.trim().isEmpty()){
+			_request_id = UUID.randomUUID().toString();
+		}
+		
 		CloseableHttpClient httpclient = HttpClients.createDefault();
 		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
 		if(KeyValueParam !=null && !KeyValueParam.isEmpty()){
@@ -117,21 +147,37 @@ public class HttpClientUtil {
 			long spendTime = System.currentTimeMillis() - startTime;
 			logger.info(">>> 发送 HTTP POST 请求失败，请求id：{}，异常：{}，耗时：{} ms", _request_id, e.getMessage(), spendTime);
 			throw new Exception("发送 HTTP POST 请求失败，异常：" + e.getMessage());
+		} finally {
+			try {
+				httpclient.close();
+			} catch (IOException e) {
+				logger.error("httpclient 关闭异常：", e);
+			}
 		}
 		return entityStr;
 	}
 	
-	
 	/**
 	  * 发送 POST JSON字符串参数 请求
-	  * @date 2019年10月26日 下午15:25:25
+	  * @date 2025年3月8日 下午16:19:25
 	  * @author Kwok
 	  **/
 	public static String postRequest(String url, String jsonBody) throws Exception{
+		return postRequest(url, jsonBody, null);
+	}
+	
+	/**
+	  * 发送 POST JSON字符串参数 请求，自定义请求Id
+	  * @date 2019年10月26日 下午15:25:25
+	  * @author Kwok
+	  **/
+	public static String postRequest(String url, String jsonBody, String _request_id) throws Exception{
 		
-		String _request_id = UUID.randomUUID().toString();
+		if (_request_id == null || _request_id.trim().isEmpty()){
+			_request_id = UUID.randomUUID().toString();
+		}
+		
 		CloseableHttpClient httpclient = HttpClients.createDefault();
-		
 		HttpEntity jsonEntity = new StringEntity(jsonBody, ContentType.APPLICATION_JSON);
 		
 		HttpPost httpRequest = new HttpPost(url);
@@ -157,6 +203,12 @@ public class HttpClientUtil {
 			long spendTime = System.currentTimeMillis() - startTime;
 			logger.info(">>> 发送 HTTP POST 请求失败，请求id：{}，异常：{}，耗时：{} ms", _request_id, e.getMessage(), spendTime);
 			throw new Exception("发送 HTTP POST 请求失败，异常：" + e.getMessage());
+		} finally {
+			try {
+				httpclient.close();
+			} catch (IOException e) {
+				logger.error("httpclient 关闭异常：", e);
+			}
 		}
 		return entityStr;
 	}
@@ -193,6 +245,12 @@ public class HttpClientUtil {
 				logger.error(">>> 发送 HTTP HEAD 请求失败，地址：{}，异常：{}", url, e.getMessage());
 			}
 			return -1L;
+		} finally {
+			try {
+				httpclient.close();
+			} catch (IOException e) {
+				logger.error("httpclient 关闭异常：", e);
+			}
 		}
 	}
 	
